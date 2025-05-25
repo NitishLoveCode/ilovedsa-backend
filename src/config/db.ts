@@ -4,13 +4,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'your_db_name',
-  process.env.DB_USER || 'your_db_user',
-  process.env.DB_PASSWORD || 'your_db_password',
+  process.env.DB_NAME || "DB name",
+  process.env.DB_USER || "DB user",
+  process.env.DB_PASSWORD || "DB password",
   {
     host: process.env.DB_HOST || 'localhost',
     dialect: 'postgres',
-    logging: false, // set to console.log to see SQL queries
+    logging: console.log
   }
 );
 
