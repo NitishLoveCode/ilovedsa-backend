@@ -5,13 +5,13 @@ import './config/db';
 // import './models/User.ts'; 
 
 
-import authRoutes from '../routes/auth.routes';
+import authRoutes from './routes/auth.routes';
 // import chatRoutes from '../routes/chat.routes';
 // import matchRoutes from '../routes/match.routes';
 // import musicRoutes from '../routes/music.routes';
 // import sessionRoutes from '../routes/session.routes';
 // import userRoutes from '../routes/user.routes';
-import { errorHandler } from '../middlewares/error.middleware';
+import { errorHandler } from './middlewares/error.middleware';
 
 dotenv.config();
 const app = express();
