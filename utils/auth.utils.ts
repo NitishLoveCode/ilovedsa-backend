@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { User } from '../models/User';
+import { UserAttributes } from '../types/user.types';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const SALT_ROUNDS = 10;
+const JWT_SECRET = process.env.JWT_SECRET!;
+const SALT_ROUNDS = process.env.SALT_ROUNDS!;
 
 // Hash password
 export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, SALT_ROUNDS);
+  return bcrypt.hash(password, +SALT_ROUNDS);
 }
 
 // Verify password
@@ -16,7 +16,7 @@ export async function verifyPassword(password: string, hash: string): Promise<bo
 }
 
 // Generate JWT token
-export function generateToken(user: User): string {
+export function generateToken(user: UserAttributes): string {
   const payload = { id: user.id, username: user.username, email: user.email };
   return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
 }

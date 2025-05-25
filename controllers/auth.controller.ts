@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { registerService } from '../services/auth.service';
+import { loginServices, registerService } from '../services/auth.service';
 
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
@@ -11,5 +11,10 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 };
 
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
-  // TODO: Implement login logic
+  try{
+    const user = await loginServices(req.body);
+    res.status(200).json({message: "User logged in successfully", user})
+  }catch(error){
+    next(error)
+  }
 };
