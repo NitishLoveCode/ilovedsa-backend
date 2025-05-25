@@ -1,33 +1,21 @@
-// src/services/auth.service.ts
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { User } from '../models/User';
 
-const JWT_SECRET = process.env.JWT_SECRET;
-const SALT_ROUNDS = 10;
+export const registerService = async (data: { name: string; email: string; password: string }) => {
+  const { name, email, password } = data;
 
-// Hash password
-export async function hashPassword(password: string): Promise<string> {
-  return bcrypt.hash(password, SALT_ROUNDS);
-}
+  const existingUser = await User.findOne({ where: { email } });
+  if (existingUser) {
+    throw new Error('User already exists');
+  }
 
-// Verify password
-export async function verifyPassword(password: string, hash: string): Promise<boolean> {
-  return bcrypt.compare(password, hash);
-}
+  const hashedPassword = await bcrypt.hash(password, 10);
 
-// Generate JWT token
-export function generateToken(user: User): string {
-  const payload = { id: user.id, username: user.username, email: user.email };
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1d' });
-}
-
-// Verify JWT token middleware helper (we'll use this later)
-export function verifyToken(token: string): Promise<any> {
-  return new Promise((resolve, reject) => {
-    jwt.verify(token, JWT_SECRET, (err, decoded) => {
-      if (err) reject(err);
-      else resolve(decoded);
-    });
+  const newUser = await User.create({
+    name,
+    email,
+    password: hashedPassword,
   });
-}
+
+  return newUser;
+};
