@@ -1,0 +1,13 @@
+
+
+export const API = '/api';
+
+
+// ALL AUTH CONSTANTS
+export const REGISTER_PATH = "/register"
+export const lOGIN_PATH = "/login"
+export const AUTH = "/auth";
+
+// ALL DASHBOARD CONSTANTS
+export const DASHBOARD = "/dashboard";
+export const DSA_STEPS = "/dsa-steps";
