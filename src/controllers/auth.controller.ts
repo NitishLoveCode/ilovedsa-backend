@@ -18,7 +18,8 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     .status(201).json(
       { 
         error: false,
-        message: 'User registered successfully', user
+        message: 'User registered successfully', 
+        user
       }
     );
 
@@ -44,7 +45,8 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     .status(200).json(
       {
         error: false,
-        message: "User logged in successfully", user
+        message: "User logged in successfully", 
+        user
       }
       )
 

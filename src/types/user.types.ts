@@ -6,3 +6,7 @@ export interface UserAttributes {
   created_at?: Date;
   updated_at?: Date;
 }
+
+export interface userIdUserNameEmail {
+  cookieUserData:  Pick<UserAttributes, "id" | "username" | "email">
+}
