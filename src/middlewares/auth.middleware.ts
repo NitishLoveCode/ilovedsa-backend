@@ -5,7 +5,6 @@ import { verifyToken } from '../utils/auth.utils';
 
 export const checkAuthCookie = async(req: Request, res: Response, next: NextFunction) => {
     const token = req.cookies.token;
-
     try{
         if(!token){
             res

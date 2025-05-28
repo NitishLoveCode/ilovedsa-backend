@@ -1,7 +1,11 @@
-import { DataTypes } from 'sequelize';
+import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/db';
+import { IDsaStepsInterface } from '../types/user.types';
 
-const DSAStep = sequelize.define('dsa_steps', {
+
+interface DsaStepCreatingAttributes extends Optional<IDsaStepsInterface, "id" | "ask_by" | "ask_chance" | "step" | "step_name"> {};
+
+export const DSAStep = sequelize.define<Model<IDsaStepsInterface, DsaStepCreatingAttributes>>('dsa_steps', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
