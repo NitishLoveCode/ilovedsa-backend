@@ -10,3 +10,11 @@ export interface UserAttributes {
 export interface userIdUserNameEmail {
   cookieUserData:  Pick<UserAttributes, "id" | "username" | "email">
 }
+
+export interface IDsaStepsInterface {
+  id: number;
+  step: number;
+  step_name: string;
+  ask_by: string;
+  ask_chance: string;
+}
