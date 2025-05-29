@@ -1,3 +1,4 @@
+import ActivityLog from '../models/ActivityLog';
 import { User } from '../models/User';
 import { hashPassword, verifyPassword } from '../utils/auth.utils';
 
@@ -13,11 +14,19 @@ export const registerService = async (data: { username: string; email: string; p
     // hashing password.
     const hashedPassword = await hashPassword(password);
 
+    // Create new user
     const newUser = await User.create({
       username,
       email,
       password_hash: hashedPassword,
     });
+
+    // create initial user activity (dsa_steps = 1, dsa_sub_steps = 1)
+    await ActivityLog.create({
+      dsa_steps: 1,
+      dsa_sub_steps: 1,
+      user_id: newUser.dataValues.id
+    })
 
     return {
       id: newUser.dataValues.id,

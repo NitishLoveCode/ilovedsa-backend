@@ -1,5 +1,5 @@
 import express from 'express';
-import { DSA_STEPS } from '../constants/CONSTANTS';
+import { DSA_STEPS} from '../constants/CONSTANTS';
 import { dsaStepsController } from '../controllers/dashboard.controller';
 import { checkAuthCookie } from '../middlewares/auth.middleware';
 

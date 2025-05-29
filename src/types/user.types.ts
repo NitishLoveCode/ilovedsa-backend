@@ -1,3 +1,6 @@
+import { Optional } from "sequelize";
+import { IActivityLogAttributes } from "./sequelizeModal.types";
+
 export interface UserAttributes {
   id: number;
   username?: string;
@@ -17,4 +20,17 @@ export interface IDsaStepsInterface {
   step_name: string;
   ask_by: string;
   ask_chance: string;
+}
+
+export interface IDashboardResponseDataSet {
+  responseData: IDsaStepsInterface[][][],
+  activityLog: Optional<Pick<IActivityLogAttributes, "dsa_steps" | "dsa_sub_steps">, "dsa_steps" | "dsa_sub_steps"> | undefined
+}
+
+
+export interface IAuthTokenVerifyType {
+  id: number,
+  email: string,
+  iat: number,
+  exp: number
 }
