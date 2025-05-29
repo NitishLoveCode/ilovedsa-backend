@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { UserAttributes } from '../types/user.types';
+import { IAuthTokenVerifyType, UserAttributes } from '../types/user.types';
 
 const JWT_SECRET = process.env.JWT_SECRET!;
 const SALT_ROUNDS = process.env.SALT_ROUNDS!;
@@ -22,11 +22,11 @@ export function generateToken(user: Omit<UserAttributes, "password_hash">): stri
 }
 
 // Verify JWT token middleware helper (we'll use this later)
-export function verifyToken(token: string): Promise<any> {
+export function verifyToken(token: string): Promise<IAuthTokenVerifyType> {
   return new Promise((resolve, reject) => {
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
       if (err) reject(err);
-      else resolve(decoded);
+      else resolve(decoded as IAuthTokenVerifyType);
     });
   });
 }

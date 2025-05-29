@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import { loginServices, registerService } from '../services/auth.service';
 import { generateToken } from '../utils/auth.utils';
+import { cookieSender, responseSender } from '../utils/helper';
 
 
 // Register users
@@ -9,20 +10,14 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
     const user = await registerService(req.body);
     // Adding token.
     const token = generateToken(user)
-    res
-    .cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000, // 1 hour
+    cookieSender({res, token}) // Sending cookie
+    responseSender({
+      data: user, 
+      error: false, 
+      message: "User registered successfully",
+      res,
+      statusCode: 201
     })
-    .status(201).json(
-      { 
-        error: false,
-        message: 'User registered successfully', 
-        user
-      }
-    );
-
   } catch (err) {
     next(err);
   }
@@ -36,20 +31,14 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
 
     // Adding token.
     const token = generateToken(user)
-    res
-    .cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      maxAge: 3600000, // 1 hour
+    cookieSender({res, token}) // Sending cookie
+    responseSender({
+      data: user, 
+      error: false, 
+      message: "User logged in successfully",
+      res,
+      statusCode: 200
     })
-    .status(200).json(
-      {
-        error: false,
-        message: "User logged in successfully", 
-        user
-      }
-      )
-
   }catch(error){
     next(error)
   }
