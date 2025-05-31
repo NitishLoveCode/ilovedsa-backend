@@ -11,3 +11,5 @@ export const AUTH = "/auth";
 // ALL DASHBOARD CONSTANTS
 export const DASHBOARD = "/dashboard";
 export const DSA_STEPS = "/dsa-steps";
+export const SERVICEBASE_COMPENY_DSA_STEPS = "/services-base-company-dsa-Steps";
+export const STACK_SWITCH = "/stack-switch";
