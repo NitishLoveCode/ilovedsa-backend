@@ -1,13 +1,12 @@
 import { NextFunction, Request, Response } from "express";
-import { dashboardServices } from "../services/dashboard/dashboard.services";
-import { verifyToken } from "../utils/auth.utils";
+import { StackSwitchServices } from "../../services/dashboard/stackSwitch.services";
 
 
 
 // DSA STEPS CONTROLLER
-export const dsaStepsController = async (req: Request, res: Response, next: NextFunction) => {
+export const stackSwitch = async (req: Request, res: Response, next: NextFunction) => {
     try{
-        const dsaSteps = await dashboardServices(await verifyToken(req.cookies.token));
+        const dsaSteps = await StackSwitchServices();
         if(dsaSteps){
             res
             .status(200)
