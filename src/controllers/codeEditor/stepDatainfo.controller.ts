@@ -5,7 +5,6 @@ export const stepDaaInfo = async(req: Request, res: Response, next: NextFunction
   try {
     const {stackId, stepid} = req.body
     const dsaSteps = await stepDataInfoServices(stackId, stepid);
-    console.log()
     if (dsaSteps) {
       res.status(200).json({
         error: false,
