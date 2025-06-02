@@ -8,13 +8,14 @@ import './config/db';
 
 import authRoutes from './routes/auth.routes';
 import dashboardRoutes from "./routes/dashboard.routes";
+import stepDaaInfo from "./routes/codeEditor.routes";
 // import chatRoutes from '../routes/chat.routes';
 // import matchRoutes from '../routes/match.routes';
 // import musicRoutes from '../routes/music.routes';
 // import sessionRoutes from '../routes/session.routes';
 // import userRoutes from '../routes/user.routes';
 import { errorHandler } from './middlewares/error.middleware';
-import { API, AUTH, DASHBOARD } from './constants/CONSTANTS';
+import { API, AUTH, CODE_EDITOR, DASHBOARD } from './constants/CONSTANTS';
 
 dotenv.config();
 const app = express();
@@ -29,6 +30,7 @@ app.use(cookieParser());
 
 app.use(API + AUTH, authRoutes);
 app.use(API + DASHBOARD, dashboardRoutes)
+app.use(API + CODE_EDITOR, stepDaaInfo)
 // app.use('/api/chat', chatRoutes);
 // app.use('/api/match', matchRoutes);
 // app.use('/api/music', musicRoutes);
