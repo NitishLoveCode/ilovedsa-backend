@@ -3,8 +3,10 @@ import { stepDataInfoServices } from "../../services/codeEditor/stepDataInfoServ
 
 export const stepDaaInfo = async(req: Request, res: Response, next: NextFunction) => {
   try {
-    const {stackId, stepid} = req.body
-    const dsaSteps = await stepDataInfoServices(stackId, stepid);
+    // const {stackId, stepid} = req.query; 
+    const stackId = req.query.stackId;
+    const stepid = req.query.stepid;
+    const dsaSteps = await stepDataInfoServices(+stackId!, +stepid!);
     if (dsaSteps) {
       res.status(200).json({
         error: false,
