@@ -7,8 +7,8 @@ import { findSingleQuestionById } from "../../services/codeEditor/findSingleQues
 export const getProblomsById = async(req: Request, res: Response, next: NextFunction) =>{
 
     try {
-        const {problomId} = req.body
-        const dsaSteps = await findSingleQuestionById(problomId);
+        const problomId = req.query.problomsId
+        const dsaSteps = await findSingleQuestionById(+problomId!);
         if (dsaSteps) {
           res.status(200).json({
             error: false,
