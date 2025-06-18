@@ -7,7 +7,7 @@ export const stepDataInfoServices = async(stackId: number, stepid: number):Promi
     
     const querryForStepDataInfo = `
         SELECT id, position, short_title FROM questions 
-        WHERE step_id = :stepid AND stack_id = :stackId
+        WHERE step_id = :stepid AND stack_id = :stackId ORDER BY position
     `
     const data = await sequelize.query(querryForStepDataInfo, {
     replacements: { stepid, stackId },
