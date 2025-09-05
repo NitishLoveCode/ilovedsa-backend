@@ -1,0 +1,43 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            cd /home/ubuntu/backend
+
+            # Pull latest code
+            git fetch --all
+            git reset --hard origin/main
+
+            # Install dependencies
+            npm install --production
+
+            # Build project (if required)
+            npm run build || echo "No build step"
+
+            # Restart Node server (PM2 recommended)
+            pm2 stop all || true
+            pm2 start server.js --name "my-node-app"
+
+            # Optional: Ensure PM2 restarts on reboot
+            pm2 save
+            pm2 startup systemd -u ubuntu --hp /home/ubuntu
+          EOF
