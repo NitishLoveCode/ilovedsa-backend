@@ -1,4 +1,4 @@
-name: Deploy to EC2
+name: Deploy Node.js Backend to EC2
 
 on:
   push:
@@ -10,34 +10,47 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: Install Node.js
+        uses: actions/setup-node@v3
         with:
-          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+          node-version: '20'
 
-      - name: Deploy to EC2
+      - name: Install dependencies
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
-            cd /home/ubuntu/backend
+          npm ci
 
-            # Pull latest code
-            git fetch --all
-            git reset --hard origin/main
+      - name: Prepare EC2 directory
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo mkdir -p /var/www/node-app
+            sudo rm -rf /var/www/node-app/*
 
-            # Install dependencies
+      - name: Upload backend files
+        uses: appleboy/scp-action@v0.1.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: "/var/www/node-app"
+
+      - name: Restart Node.js server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /var/www/node-app
             npm install --production
-
-            # Build project (if required)
-            npm run build || echo "No build step"
-
-            # Restart Node server (PM2 recommended)
             pm2 stop all || true
-            pm2 start server.js --name "my-node-app"
-
-            # Optional: Ensure PM2 restarts on reboot
+            pm2 start server.js --name "node-backend"
             pm2 save
-            pm2 startup systemd -u ubuntu --hp /home/ubuntu
-          EOF
+            pm2 startup systemd -u ${{ secrets.EC2_USER }} --hp /home/${{ secrets.EC2_USER }}
