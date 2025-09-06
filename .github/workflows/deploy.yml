@@ -3,7 +3,7 @@ name: Deploy Node.js Backend to EC2
 on:
   push:
     branches:
-      - dev   # change to main if you deploy from main
+      - dev   # change to maidn if you deploy from main
 
 jobs:
   deploy:
