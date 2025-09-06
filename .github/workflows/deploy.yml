@@ -3,7 +3,7 @@ name: Deploy Backend to EC2
 on:
   push:
     branches:
-      - dev   # Deploy only when pushing to main
+      - dev   # Deploy only when pushing to maikk
 
 jobs:
   deploy:
