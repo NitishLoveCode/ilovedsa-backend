@@ -1,9 +1,9 @@
-name: Deploy React App to EC2
+name: Deploy Node.js Backend to EC2
 
 on:
   push:
     branches:
-      - dev
+      - dev   # change to main if you deploy from main
 
 jobs:
   deploy:
@@ -18,33 +18,35 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install dependencies and build
+      - name: Install dependencies
         run: |
           npm ci
-          npm run build
 
-      - name: Verify build output
-        run: |
-          echo "Root directory contents:"
-          ls -la
-          echo "Build directory contents:"
-          ls -la build || { echo "❌ Build folder missing!"; exit 1; }
-
-      - name: Prepare EC2 directory
+      - name: Prepare EC2 for backend
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            sudo mkdir -p /var/www/frontend
-            sudo rm -rf /var/www/frontend/*
+            sudo mkdir -p /var/www/backend
 
-      - name: Upload build files
+      - name: Upload backend files
         uses: appleboy/scp-action@v0.1.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "dist/"
-          target: "/var/www/frontend"
+          source: "."
+          target: "/var/www/backend"
+
+      - name: Install & restart backend on EC2
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /var/www/backend
+            npm ci
+            pm2 restart backend || pm2 start npm --name backend -- run start
