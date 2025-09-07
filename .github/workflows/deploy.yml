@@ -17,7 +17,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            echo "✅ Connection to EC2 successful!"
+            echo "✅ Connection to EC2 successful!  hello"
             echo "---"
             echo "User: $(whoami)"
             echo "Directory: $(pwd)"
