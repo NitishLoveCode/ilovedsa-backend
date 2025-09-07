@@ -1,7 +1,9 @@
 name: Test EC2 Connection
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - dev
 
 jobs:
   test-connection:
